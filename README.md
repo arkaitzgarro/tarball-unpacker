@@ -72,6 +72,6 @@ Options:
   --help     Show help                                                 [boolean]
 
 Examples:
-  unpacker /tmp/tarball.tgz /tmp/upacked
-  unpacker http://www.arkaitzgarro.com/tarball.tgz /tmp/upacked
+  unpacker /tmp/tarball.tgz /tmp/unpacked
+  unpacker http://www.arkaitzgarro.com/tarball.tgz /tmp/unpacked
 ```

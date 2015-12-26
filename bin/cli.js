@@ -16,7 +16,8 @@ var argv = yargs.usage('Usage: $0 (<source path> | <url>) <destination folder>')
     .help('help')
     .argv;
 
-var method = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/.test(argv._[0]) ? 'extractFromURL' : 'extractFromFile';
+var isURL = /[a-z]{2,6}?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/gi;
+var method = isURL.test(argv._[0]) ? 'extractFromURL' : 'extractFromFile';
 
 unpacker[method](argv._[0], argv._[1])
     .then(function() {

@@ -2,7 +2,7 @@
   "name": "tarball-unpacker",
   "version": "1.0.0",
   "description": "Tarball unpacker tool for Node.js",
-  "main": "unpacker.js",
+  "main": "src/unpacker.js",
   "scripts": {
     "test": "mocha test/**/*-test.js",
     "lint": "jslint '*.js' 'test/**/*.js'",

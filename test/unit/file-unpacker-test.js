@@ -7,7 +7,7 @@ require('../setup/node');
 
 describe('File unpacker test:', function() {
 
-    var unpacker = require('../../unpacker');
+    var unpacker = require('../../src/unpacker');
 
     it('instance is created', function() {
         expect(unpacker).to.not.be.undefined;

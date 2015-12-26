@@ -26,25 +26,43 @@ Unpacker.prototype.configure = function(options) {
     return this;
 };
 
+var extract = function(stream, destinationFolder) {
+    var _extract = function(resolve, reject) {
+
+        console.info('Extracting file into ' + destinationFolder);
+
+        stream
+            .pipe(zlib.createGunzip())
+            .pipe(tar.Extract({path: destinationFolder}))
+            .on('entry', function(entry) {
+                if (this._options.onExtract) {
+                    this._options.onExtract(entry);
+                }
+            }.bind(this))
+            .on('error', reject)
+            .on('end', resolve);
+    };
+
+    return new Promise(_extract.bind(this));
+};
+
 /**
  * Given a path to a tarball, extract the content on destination folder
  * @param  {String} tarballPath       Relative/absolute path to tarball file
  * @return {String} destinationFolder Final destination folder
  */
 Unpacker.prototype.extractFromFile = function(tarballPath, destinationFolder) {
-    var _self = this;
-
     var _extractFromFile = function _extractFromFile(resolve, reject) {
         var file = fs.createReadStream(tarballPath);
 
-        file.on('error', function(err) {
+        file.on('error', function() {
             reject(new Error('File not found: ' + tarballPath));
         });
 
-        _self._extract(file, destinationFolder).then(resolve).catch(reject);
+        extract.call(this, file, destinationFolder).then(resolve).catch(reject);
     };
 
-    return new Promise(_extractFromFile);
+    return new Promise(_extractFromFile.bind(this));
 };
 
 /**
@@ -53,8 +71,6 @@ Unpacker.prototype.extractFromFile = function(tarballPath, destinationFolder) {
  * @return {[type]}                [description]
  */
 Unpacker.prototype.extractFromURL = function(url, destinationFolder) {
-    var _self = this;
-
     var _extractFromURL = function _extractFromURL(resolve, reject) {
 
         console.info('Conecting to: ' + url);
@@ -67,39 +83,17 @@ Unpacker.prototype.extractFromURL = function(url, destinationFolder) {
 
             console.info('Downloading file...');
 
-            _self._extract(response, destinationFolder)
+            extract.call(this, response, destinationFolder)
                 .then(resolve)
                 .catch(reject);
-        });
+        }.bind(this));
 
         req.on('error', function(e) {
             reject(new Error('Problem with http request: ' + e.message));
         });
     };
 
-    return new Promise(_extractFromURL);
-};
-
-Unpacker.prototype._extract = function(stream, destinationFolder) {
-    var _self = this;
-
-    var _extract = function(resolve, reject) {
-
-        console.info('Extracting file into ' + destinationFolder);
-
-        stream
-            .pipe(zlib.createGunzip())
-            .pipe(tar.Extract({path: destinationFolder}))
-            .on('entry', function(entry) {
-                if (_self._options.onExtract) {
-                    _self._options.onExtract(entry);
-                }
-            })
-            .on('error', reject)
-            .on('end', resolve);
-    };
-
-    return new Promise(_extract);
+    return new Promise(_extractFromURL.bind(this));
 };
 
 module.exports = new Unpacker();

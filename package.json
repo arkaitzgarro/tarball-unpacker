@@ -11,50 +11,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/alanhoff/node-tar.gz.git"
-  },
-  "keywords": [
-    "compression",
-    "decompression",
-    "compress",
-    "decompress",
-    "tar",
-    "tape",
-    "archive",
-    "tape",
-    "arquive",
-    "gzip",
-    "gz",
-    "tarball"
-  ],
-  "author": "Alan Hoffmeister <alanhoffmeister@gmail.com>",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/alanhoff/node-tar.gz/issues"
-  },
-  "bin": {
-    "targz": "bin/targz"
-  },
-  "homepage": "https://github.com/alanhoff/node-tar.gz#readme",
-  "dependencies": {
-    "bluebird": "^2.9.34",
-    "chai": "^3.2.0",
-    "commander": "^2.8.1",
-    "fstream": "^1.0.7",
-    "mocha": "^2.2.5",
-    "mout": "^0.11.0",
-    "tar": "^2.1.1"
-  },
-  "devDependencies": {
-    "coveralls": "^2.11.3",
-    "istanbul": "^0.3.17",
-    "temp": "^0.8.3"
-  }
-}
-
-  },
-  "repository": {
-    "type": "git",
     "url": "git+https://github.com/arkaitzgarro/tarball-unpacker.git"
   },
   "keywords": [
@@ -74,6 +30,11 @@
     "unpacker": "bin/cli.js"
   },
   "homepage": "https://github.com/arkaitzgarro/tarball-unpacker#readme",
+  "dependencies": {
+    "bluebird": "^3.0.6",
+    "tar": "^2.2.1",
+    "yargs": "^3.31.0"
+  },
   "devDependencies": {
     "chai": "^3.4.1",
     "istanbul": "^0.4.1",
@@ -81,11 +42,6 @@
     "mocha": "^2.1.0",
     "sinon": "^1.17.2",
     "sinon-chai": "^2.8.0"
-  },
-  "dependencies": {
-    "bluebird": "^3.0.6",
-    "tar": "^2.2.1",
-    "yargs": "^3.31.0"
   },
   "engines": {
     "node": ">= 0.12.7"

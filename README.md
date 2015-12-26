@@ -60,12 +60,12 @@ unpacker
 
 ### Command line
 
-It's also possible to use `tarball-unpacker` as a command line utility, you just need to
+It's also possible to use `unpacker` as a command line utility, you just need to
 install it globally with `npm install -g tarball-unpacker`. Here is the help command
 output.
 
 ```javascript
-Usage: tarball-unpacker (<source path> | <url>) <destination folder>
+Usage: unpacker (<source path> | <url>) <destination folder>
 
 Options:
   --version  Show version number                                       [boolean]

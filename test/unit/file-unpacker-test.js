@@ -1,4 +1,4 @@
-/* global describe, beforeEach, it, expect, spy */
+/* global describe, it, expect */
 /* jshint -W030 */
 
 'use strict';

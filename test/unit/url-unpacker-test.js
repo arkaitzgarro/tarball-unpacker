@@ -1,4 +1,4 @@
-/* global describe, beforeEach, it, expect, spy */
+/* global describe, it, expect */
 /* jshint -W030 */
 
 'use strict';
@@ -43,7 +43,7 @@ describe('URL unpacker test:', function() {
             .then(done);
     });
 
-    it('decompressed files are present', function() {
+    it('decompressed files are present', function(done) {
         var files = [];
 
         unpacker.configure({

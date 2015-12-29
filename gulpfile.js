@@ -2,6 +2,7 @@
 
 var gulp = require('gulp');
 var plugins = require('gulp-load-plugins')();
+var del = require('del');
 var path = require('path');
 
 var manifest = require('./package.json');
@@ -35,4 +36,15 @@ gulp.task('test', ['lint-test', 'lint-src'], function() {
     require('babel-core/register');
 
     return test();
+});
+
+gulp.task('clean', function(done) {
+    del([destinationFolder], done);
+});
+
+gulp.task('build', ['clean'], function() {
+  return gulp.src(['src/**/*.js', 'bin/**/*.js'])
+    .pipe(plugins.plumber())
+    .pipe(plugins.babel({ blacklist: ['useStrict'] }))
+    .pipe(gulp.dest(destinationFolder));
 });

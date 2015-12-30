@@ -60,7 +60,7 @@
 
     "disallowMultipleLineBreaks": true,
     "disallowNewlineBeforeBlockStatements": true,
-    "disallowKeywords": ["with"],
+    "disallowKeywords": ["with", "eval", "continue"],
     "disallowSpacesInFunctionExpression": {
         "beforeOpeningRoundBrace": true
     },

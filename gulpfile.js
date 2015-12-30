@@ -42,12 +42,14 @@ gulp.task('test', ['lint-test', 'lint-src'], function() {
 });
 
 gulp.task('clean', function(done) {
-    del([destinationFolder], done);
+    del([destinationFolder]).then(function () {
+        done();
+    });
 });
 
 gulp.task('build', ['clean'], function() {
   return gulp.src(['src/**/*.js', 'bin/**/*.js'])
     .pipe(plugins.plumber())
-    .pipe(plugins.babel({ blacklist: ['useStrict'] }))
+    .pipe(plugins.babel({presets: ['es2015']}))
     .pipe(gulp.dest(destinationFolder));
 });

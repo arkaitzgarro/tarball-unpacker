@@ -8,7 +8,6 @@ var zlib = require('zlib');
 
 /**
  * Unpacker contructor
- * @return {Object} Instance of Unpacker
  */
 var Unpacker = function Unpacker() {
     this._options = {};
@@ -16,6 +15,7 @@ var Unpacker = function Unpacker() {
 
 /**
  * Configure unpacker with decompression options
+ *
  * @param  {Object} options Options for decompression
  * @return {Object}         Self instance
  */
@@ -43,11 +43,14 @@ var extract = function(stream, destinationFolder) {
             .on('end', resolve);
     };
 
-    return new Promise(_extract.bind(this));
+    var promise = new Promise(_extract.bind(this));
+
+    return promise;
 };
 
 /**
  * Given a path to a tarball, extract the content on destination folder
+ *
  * @param  {String} tarballPath       Relative/absolute path to tarball file
  * @return {String} destinationFolder Final destination folder
  */
@@ -62,13 +65,16 @@ Unpacker.prototype.extractFromFile = function(tarballPath, destinationFolder) {
         extract.call(this, file, destinationFolder).then(resolve).catch(reject);
     };
 
-    return new Promise(_extractFromFile.bind(this));
+    var promise = new Promise(_extractFromFile.bind(this));
+
+    return promise;
 };
 
 /**
  * Given a URL to a tarball, extract the content on destination folder
- * @param  {[type]} first_argument [description]
- * @return {[type]}                [description]
+ *
+ * @param  {String}  url URL to tarball file
+ * @return {Promise}
  */
 Unpacker.prototype.extractFromURL = function(url, destinationFolder) {
     var _extractFromURL = function _extractFromURL(resolve, reject) {

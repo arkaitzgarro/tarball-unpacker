@@ -17,7 +17,10 @@ var createLintTask = function createLintTask(taskName, files) {
         return gulp.src(files)
             .pipe(plugins.plumber())
             .pipe(plugins.jshint())
-            .pipe(plugins.jshint.reporter('jshint-stylish'));
+            .pipe(plugins.jshint.reporter('jshint-stylish'))
+            .pipe(plugins.jscs())
+            .pipe(plugins.jscs.reporter())
+            .pipe(plugins.jscs.reporter('fail'));
     });
 };
 

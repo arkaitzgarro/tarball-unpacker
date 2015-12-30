@@ -4,12 +4,14 @@
   "description": "Tarball unpacker tool for Node.js",
   "main": "dist/unpacker.js",
   "scripts": {
-    "test": "gulp test",
-    "lint": "gulp lint-src && gulp lint-test",
+    "test": "standard && gulp test",
     "coverage": "istanbul cover _mocha test/unit/**/*.js",
     "travis": "./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha --report lcovonly -- -R spec test/**/*-test.js && cat ./coverage/lcov.info | ./node_modules/.bin/coveralls && rm -rf ./coverage",
     "prepublish": "gulp build"
   },
+  "files": [
+    "dist/"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/arkaitzgarro/tarball-unpacker.git"
@@ -44,17 +46,14 @@
     "del": "^2.2.0",
     "gulp": "^3.9.0",
     "gulp-babel": "^6.1.1",
-    "gulp-jscs": "^3.0.2",
-    "gulp-jshint": "^2.0.0",
     "gulp-load-plugins": "^1.1.0",
     "gulp-mocha": "^2.2.0",
     "gulp-plumber": "^1.0.1",
     "istanbul": "^0.4.1",
-    "jshint": "^2.8.0",
-    "jshint-stylish": "^2.1.0",
     "mocha": "^2.1.0",
     "sinon": "^1.17.2",
-    "sinon-chai": "^2.8.0"
+    "sinon-chai": "^2.8.0",
+    "standard": "^5.4.1"
   },
   "babelOptions": {
     "mochaGlobals": [
@@ -62,6 +61,9 @@
       "spy",
       "expect"
     ]
+  },
+  "standard": {
+    "globals": [ "describe", "it", "expect" ]
   },
   "engines": {
     "node": ">= 0.12.7"

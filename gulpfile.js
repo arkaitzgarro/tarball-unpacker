@@ -1,55 +1,31 @@
-'use strict';
+'use strict'
 
-var gulp = require('gulp');
-var plugins = require('gulp-load-plugins')();
-var del = require('del');
-var path = require('path');
+var gulp = require('gulp')
+var plugins = require('gulp-load-plugins')()
+var del = require('del')
+var path = require('path')
 
-var manifest = require('./package.json');
-var mainFile = manifest.main;
-var config = manifest.babelOptions;
-var destinationFolder = path.dirname(mainFile);
+var manifest = require('./package.json')
+var mainFile = manifest.main
+var config = manifest.babelOptions
+var destinationFolder = path.dirname(mainFile)
 
-var createLintTask = function createLintTask(taskName, files) {
-    gulp.task(taskName, function() {
-        require('babel-core/register');
+gulp.task('test', function () {
+  require('babel-core/register')
 
-        return gulp.src(files)
-            .pipe(plugins.plumber())
-            .pipe(plugins.jshint())
-            .pipe(plugins.jshint.reporter('jshint-stylish'))
-            .pipe(plugins.jscs())
-            .pipe(plugins.jscs.reporter())
-            .pipe(plugins.jscs.reporter('fail'));
-    });
-};
+  return gulp.src(['test/setup/node.js', 'test/unit/**/*.js'], {read: false})
+    .pipe(plugins.mocha({globals: config.mochaGlobals}))
+})
 
-var test = function test() {
-    return gulp.src(['test/setup/node.js', 'test/unit/**/*.js'], {read: false})
-        .pipe(plugins.mocha({globals: config.mochaGlobals}));
-};
+gulp.task('clean', function (done) {
+  del([destinationFolder]).then(function () {
+    done()
+  })
+})
 
-// Lint source code
-createLintTask('lint-src', ['src/**/*.js']);
-
-// Lint test code
-createLintTask('lint-test', ['test/**/*.js', '!test/resources/**/*']);
-
-gulp.task('test', ['lint-test', 'lint-src'], function() {
-    require('babel-core/register');
-
-    return test();
-});
-
-gulp.task('clean', function(done) {
-    del([destinationFolder]).then(function () {
-        done();
-    });
-});
-
-gulp.task('build', ['clean'], function() {
+gulp.task('build', ['clean'], function () {
   return gulp.src(['src/**/*.js', 'bin/**/*.js'])
     .pipe(plugins.plumber())
     .pipe(plugins.babel({presets: ['es2015']}))
-    .pipe(gulp.dest(destinationFolder));
-});
+    .pipe(gulp.dest(destinationFolder))
+})

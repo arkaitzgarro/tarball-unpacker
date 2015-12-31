@@ -13,51 +13,51 @@ Tarball unpacker tool for Node.js
 * `extractFromFile` extracts a tarball file into a target directory.
 
 ```javascript
-var unpacker = require('tarball-unpacker');
+var unpacker = require('tarball-unpacker')
 
 // Specify a file and target directory
 unpacker
-    .extractFromFile('/path/to/file.tgz', '/tmp/destination')
-    .then(function() {
-        console.log('Done!');
-    });
+  .extractFromFile('/path/to/file.tgz', '/tmp/destination')
+  .then(function() {
+    console.log('Done!')
+  })
 ```
 
 Listen to each file extracted:
 
 ```javascript
-var unpacker = require('tarball-unpacker');
+var unpacker = require('tarball-unpacker')
 
 unpacker.configure({
-    onExtract: function(entry) {
-        console.log(entry.path);
-    }
-});
+  onExtract: function(entry) {
+    console.log(entry.path)
+  }
+})
 
 unpacker
-    .extractFromFile('/path/to/file.tgz', '/tmp/destination')
-    .then(function() {
-        console.log('Done!');
-    })
-    .catch(function(err) {
-        console.log('Something went wrong ', err);
-    });
+  .extractFromFile('/path/to/file.tgz', '/tmp/destination')
+  .then(function() {
+    console.log('Done!')
+  })
+  .catch(function(err) {
+    console.log('Something went wrong ', err)
+  })
 ```
 
 * `extractFromURL` extracts a tarball from URL into a target directory.
 
 ```javascript
-var unpacker = require('tarball-unpacker');
+var unpacker = require('tarball-unpacker')
 
 // Specify a URL and target directory
 unpacker
-    .extractFromFile('http://www.arkaitzgarro.com/tarball.tgz', '/tmp/destination')
-    .then(function() {
-        console.log('Done!');
-    })
-    .catch(function(err) {
-        console.log('Something went wrong ', err);
-    });
+  .extractFromFile('http://www.arkaitzgarro.com/tarball.tgz', '/tmp/destination')
+  .then(function() {
+    console.log('Done!')
+  })
+  .catch(function(err) {
+    console.log('Something went wrong ', err)
+  })
 ```
 
 ### Command line

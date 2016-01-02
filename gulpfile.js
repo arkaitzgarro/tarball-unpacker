@@ -10,17 +10,17 @@ var mainFile = manifest.main
 var config = manifest.babelOptions
 var destinationFolder = path.dirname(mainFile)
 
-gulp.task('test', function () {
+gulp.task('clean', function (done) {
+  del([destinationFolder, 'build-test']).then(function () {
+    done()
+  })
+})
+
+gulp.task('test', ['build'], function () {
   require('babel-core/register')
 
   return gulp.src(['test/setup/node.js', 'test/unit/**/*.js'], {read: false})
     .pipe(plugins.mocha({globals: config.mochaGlobals}))
-})
-
-gulp.task('clean', function (done) {
-  del([destinationFolder]).then(function () {
-    done()
-  })
 })
 
 gulp.task('build', ['clean'], function () {

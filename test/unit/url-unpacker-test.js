@@ -3,7 +3,7 @@
 require('../setup/node')
 
 describe('URL unpacker test:', function () {
-  var unpacker = require('../../src/unpacker')
+  var unpacker = require('../../dist/unpacker').default
 
   it('instance is created', function () {
     expect(unpacker).to.not.be.undefined

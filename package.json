@@ -4,8 +4,7 @@
   "main": "dist/unpacker.js",
   "scripts": {
     "test": "standard && gulp test",
-    "coverage": "istanbul cover _mocha test/unit/**/*.js",
-    "travis": "./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha --report lcovonly -- -R spec test/**/*-test.js && cat ./coverage/lcov.info | ./node_modules/.bin/coveralls && rm -rf ./coverage",
+    "coverage": "gulp coverage",
     "prepublish": "gulp build",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
@@ -47,9 +46,11 @@
     "del": "^2.2.0",
     "gulp": "^3.9.0",
     "gulp-babel": "^6.1.1",
+    "gulp-istanbul": "^0.10.3",
     "gulp-load-plugins": "^1.1.0",
     "gulp-mocha": "^2.2.0",
     "gulp-plumber": "^1.0.1",
+    "isparta": "^4.0.0",
     "istanbul": "^0.4.1",
     "mocha": "^2.1.0",
     "semantic-release": "^4.3.5",

@@ -25,7 +25,7 @@ var test = function test () {
 gulp.task('coverage', function (done) {
   require('babel-core/register')
 
-  gulp.src(['src/**/*.js'])
+  gulp.src(['src/**/*.js', '!src/**/cli.js'])
     .pipe(plugins.istanbul({ instrumenter: isparta.Instrumenter }))
     .pipe(plugins.istanbul.hookRequire())
     .on('finish', function () {

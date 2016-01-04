@@ -1,103 +1,105 @@
 'use strict'
 
-var Promise = require('bluebird')
-var http = require('http')
-var fs = require('fs')
-var tar = require('tar')
-var zlib = require('zlib')
+import Promise from 'bluebird'
+import http from 'http'
+import fs from 'fs'
+import tar from 'tar'
+import zlib from 'zlib'
 
-/**
- * Unpacker contructor
- */
-var Unpacker = function Unpacker () {
-  this._options = {}
-}
+class Unpacker {
 
-/**
- * Configure unpacker with decompression options
- *
- * @param  {Object} options Options for decompression
- * @return {Object}         Self instance
- */
-Unpacker.prototype.configure = function (options) {
-  // TODO: extend default instance properties
-  this._options = options || {}
+  /**
+   * Unpacker contructor
+   */
+  constructor () {
+    this._options = {}
+  }
 
-  return this
-}
+  /**
+   * Configure unpacker with decompression options
+   *
+   * @param  {Object} options Options for decompression
+   * @return {Object}         Self instance
+   */
+  configure (options) {
+    // TODO: extend default instance properties
+    this._options = options || {}
 
-var extract = function (stream, destinationFolder) {
-  var _extract = function (resolve, reject) {
-    console.info('Extracting file into ' + destinationFolder)
+    return this
+  }
 
-    stream
-      .pipe(zlib.createGunzip())
-      .pipe(tar.Extract({path: destinationFolder}))
-      .on('entry', function (entry) {
-        if (this._options.onExtract) {
-          this._options.onExtract(entry)
+  /**
+   * Given a path to a tarball, extract the content on destination folder
+   *
+   * @param  {String} tarballPath       Relative/absolute path to tarball file
+   * @return {String} destinationFolder Final destination folder
+   */
+  extractFromFile (tarballPath, destinationFolder) {
+    const _extractFromFile = function _extractFromFile (resolve, reject) {
+      const file = fs.createReadStream(tarballPath)
+
+      file.on('error', function () {
+        reject(new Error('File not found: ' + tarballPath))
+      })
+
+      this._extract(file, destinationFolder).then(resolve).catch(reject)
+    }
+
+    const promise = new Promise(_extractFromFile.bind(this))
+
+    return promise
+  }
+
+  /**
+   * Given a URL to a tarball, extract the content on destination folder
+   *
+   * @param  {String}  url URL to tarball file
+   * @return {Promise}
+   */
+  extractFromURL (url, destinationFolder) {
+    const _extractFromURL = function _extractFromURL (resolve, reject) {
+      console.info('Conecting to: ' + url)
+
+      const req = http.get(url, function (response) {
+        if (response.statusCode !== 200) {
+          reject(new Error('Response not OK: ' + response.statusCode))
+          return
         }
+
+        console.info('Downloading file...')
+
+        this._extract(response, destinationFolder)
+          .then(resolve)
+          .catch(reject)
       }.bind(this))
-      .on('error', reject)
-      .on('end', resolve)
+
+      req.on('error', function (e) {
+        reject(new Error('Problem with http request: ' + e.message))
+      })
+    }
+
+    return new Promise(_extractFromURL.bind(this))
   }
 
-  var promise = new Promise(_extract.bind(this))
+  _extract (stream, destinationFolder) {
+    const extract = function (resolve, reject) {
+      console.info('Extracting file into ' + destinationFolder)
 
-  return promise
-}
+      stream
+        .pipe(zlib.createGunzip())
+        .pipe(tar.Extract({path: destinationFolder}))
+        .on('entry', function (entry) {
+          if (this._options.onExtract) {
+            this._options.onExtract(entry)
+          }
+        }.bind(this))
+        .on('error', reject)
+        .on('end', resolve)
+    }
 
-/**
- * Given a path to a tarball, extract the content on destination folder
- *
- * @param  {String} tarballPath       Relative/absolute path to tarball file
- * @return {String} destinationFolder Final destination folder
- */
-Unpacker.prototype.extractFromFile = function (tarballPath, destinationFolder) {
-  var _extractFromFile = function _extractFromFile (resolve, reject) {
-    var file = fs.createReadStream(tarballPath)
-
-    file.on('error', function () {
-      reject(new Error('File not found: ' + tarballPath))
-    })
-
-    extract.call(this, file, destinationFolder).then(resolve).catch(reject)
+    return new Promise(extract.bind(this))
   }
-
-  var promise = new Promise(_extractFromFile.bind(this))
-
-  return promise
 }
 
-/**
- * Given a URL to a tarball, extract the content on destination folder
- *
- * @param  {String}  url URL to tarball file
- * @return {Promise}
- */
-Unpacker.prototype.extractFromURL = function (url, destinationFolder) {
-  var _extractFromURL = function _extractFromURL (resolve, reject) {
-    console.info('Conecting to: ' + url)
-
-    var req = http.get(url, function (response) {
-      if (response.statusCode !== 200) {
-        reject(new Error('Response not OK: ' + response.statusCode))
-        return
-      }
-
-      console.info('Downloading file...')
-
-      extract.call(this, response, destinationFolder)
-        .then(resolve)
-        .catch(reject)
-    }.bind(this))
-
-    req.on('error', function (e) {
-      reject(new Error('Problem with http request: ' + e.message))
-    })
-  }
-
-  return new Promise(_extractFromURL.bind(this))
-}
-
-module.exports = new Unpacker()
+export default new Unpacker()
+export {Unpacker}

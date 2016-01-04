@@ -1,6 +1,6 @@
-/* global beforeEach, afterEach */
+/* global global, beforeEach, afterEach */
 
-module.exports = function () {
+export default function () {
   'use strict'
 
   global.expect = global.chai.expect

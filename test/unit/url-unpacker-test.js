@@ -6,6 +6,8 @@ import unpacker from '../../dist/unpacker'
 import * as setup from '../setup/node'
 
 describe('URL unpacker test:', () => {
+  const tarballURL = 'http://registry.npmjs.org/tarball-unpacker/-/tarball-unpacker-1.0.2.tgz'
+
   it('instance is created', () => {
     expect(unpacker).to.not.be.undefined
   })
@@ -36,7 +38,7 @@ describe('URL unpacker test:', () => {
   })
 
   it('tarball is decompressed', (done) => {
-    unpacker.extractFromURL('http://registry.npmjs.org/bluebird/-/bluebird-3.0.6.tgz', '/tmp/bluebird')
+    unpacker.extractFromURL(tarballURL, '/tmp/tarball-unpacker')
       .then(done)
   })
 
@@ -50,11 +52,12 @@ describe('URL unpacker test:', () => {
     })
 
     unpacker
-      .extractFromURL('http://registry.npmjs.org/bluebird/-/bluebird-3.0.6.tgz', '/tmp/bluebird')
+      .extractFromURL(tarballURL, '/tmp/tarball-unpacker')
       .then(() => {
         expect(files[0]).to.be.equal('package/package.json')
         expect(files[1]).to.be.equal('package/README.md')
-        expect(files[4]).to.be.equal('package/js/browser/bluebird.js')
+        expect(files[3]).to.be.equal('package/dist/cli.js')
+        expect(files[4]).to.be.equal('package/dist/unpacker.js')
         done()
       })
   })

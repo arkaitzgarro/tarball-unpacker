@@ -61,6 +61,24 @@ unpacker
   })
 ```
 
+* Create instances of `unpacker` if needed
+
+```javascript
+import {Unpaker} from 'tarball-unpacker'
+
+// Create a new instance of Unpacker
+const unpaker = new Unpacker()
+
+unpacker
+  .extractFromFile('http://www.arkaitzgarro.com/tarball.tgz', '/tmp/destination')
+  .then(() => {
+    console.log('Done!')
+  })
+  .catch((err) => {
+    console.log('Something went wrong ', err)
+  })
+```
+
 ### Command line
 
 It's also possible to use `unpacker` as a command line utility, you just need to

@@ -3,7 +3,6 @@
 'use strict'
 
 import unpacker from '../../dist/unpacker'
-import * as setup from '../setup/node'
 
 describe('File unpacker test:', () => {
   it('instance is created', () => {
@@ -31,21 +30,15 @@ describe('File unpacker test:', () => {
   it('tarball is decompressed', (done) => {
     unpacker
       .extractFromFile(__dirname + '/../resources/bluebird.tgz', '/tmp/bluebird')
-      .then(done)
+      .then(() => {
+        done()
+      })
   })
 
   it('decompressed files are present', (done) => {
-    var files = []
-
-    unpacker.configure({
-      onExtract: (entry) => {
-        files.push(entry.path)
-      }
-    })
-
     unpacker
       .extractFromFile(__dirname + '/../resources/bluebird.tgz', '/tmp/bluebird')
-      .then(() => {
+      .then((files) => {
         expect(files[0]).to.be.equal('package/package.json')
         expect(files[1]).to.be.equal('package/README.md')
         expect(files[4]).to.be.equal('package/js/browser/bluebird.js')

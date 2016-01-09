@@ -3,7 +3,6 @@
 'use strict'
 
 import unpacker from '../../dist/unpacker'
-import * as setup from '../setup/node'
 
 describe('URL unpacker test:', () => {
   const tarballURL = 'http://registry.npmjs.org/tarball-unpacker/-/tarball-unpacker-1.0.2.tgz'
@@ -39,21 +38,15 @@ describe('URL unpacker test:', () => {
 
   it('tarball is decompressed', (done) => {
     unpacker.extractFromURL(tarballURL, '/tmp/tarball-unpacker')
-      .then(done)
+      .then(() => {
+        done()
+      })
   })
 
   it('decompressed files are present', (done) => {
-    const files = []
-
-    unpacker.configure({
-      onExtract: (entry) => {
-        files.push(entry.path)
-      }
-    })
-
     unpacker
       .extractFromURL(tarballURL, '/tmp/tarball-unpacker')
-      .then(() => {
+      .then((files) => {
         expect(files[0]).to.be.equal('package/package.json')
         expect(files[1]).to.be.equal('package/README.md')
         expect(files[3]).to.be.equal('package/dist/cli.js')

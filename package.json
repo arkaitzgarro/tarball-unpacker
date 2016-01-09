@@ -1,5 +1,6 @@
 {
   "name": "tarball-unpacker",
+  "version": "1.0.3",
   "description": "Tarball unpacker tool for Node.js",
   "main": "dist/unpacker.js",
   "scripts": {

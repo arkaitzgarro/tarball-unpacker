@@ -83,18 +83,24 @@ class Unpacker {
 
   _extract (stream, destinationFolder) {
     const extract = function (resolve, reject) {
+      const files = []
+
       console.info('Extracting file into ' + destinationFolder)
 
       stream
         .pipe(zlib.createGunzip())
         .pipe(tar.Extract({path: destinationFolder}))
         .on('entry', function (entry) {
+          files.push(entry.path)
+
           if (this._options.onExtract) {
             this._options.onExtract(entry)
           }
         }.bind(this))
         .on('error', reject)
-        .on('end', resolve)
+        .on('end', () => {
+          resolve(files)
+        })
     }
 
     return new Promise(extract.bind(this))

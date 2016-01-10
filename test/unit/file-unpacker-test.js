@@ -29,7 +29,7 @@ describe('File unpacker test:', () => {
 
   it('tarball is decompressed', (done) => {
     unpacker
-      .extractFromFile(__dirname + '/../resources/bluebird.tgz', '/tmp/bluebird')
+      .extractFromFile(__dirname + '/../resources/tarball-unpacker.tgz', '/tmp/unpacker')
       .then(() => {
         done()
       })
@@ -37,11 +37,32 @@ describe('File unpacker test:', () => {
 
   it('decompressed files are present', (done) => {
     unpacker
-      .extractFromFile(__dirname + '/../resources/bluebird.tgz', '/tmp/bluebird')
+      .extractFromFile(__dirname + '/../resources/tarball-unpacker.tgz', '/tmp/unpacker')
       .then((files) => {
         expect(files[0]).to.be.equal('package/package.json')
         expect(files[1]).to.be.equal('package/README.md')
-        expect(files[4]).to.be.equal('package/js/browser/bluebird.js')
+        expect(files[3]).to.be.equal('package/dist/cli.js')
+        expect(files[4]).to.be.equal('package/dist/unpacker.js')
+        done()
+      })
+  })
+
+  it('onExtract event is called', (done) => {
+    const files = []
+
+    unpacker.configure({
+      onExtract: (entry) => {
+        files.push(entry.path)
+      }
+    })
+
+    unpacker
+      .extractFromFile(__dirname + '/../resources/tarball-unpacker.tgz', '/tmp/unpacker')
+      .then(() => {
+        expect(files[0]).to.be.equal('package/package.json')
+        expect(files[1]).to.be.equal('package/README.md')
+        expect(files[3]).to.be.equal('package/dist/cli.js')
+        expect(files[4]).to.be.equal('package/dist/unpacker.js')
         done()
       })
   })

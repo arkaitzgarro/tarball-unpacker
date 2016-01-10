@@ -54,4 +54,24 @@ describe('URL unpacker test:', () => {
         done()
       })
   })
+
+  it('onExtract event is called', (done) => {
+    const files = []
+
+    unpacker.configure({
+      onExtract: (entry) => {
+        files.push(entry.path)
+      }
+    })
+
+    unpacker
+      .extractFromURL(tarballURL, '/tmp/tarball-unpacker')
+      .then(() => {
+        expect(files[0]).to.be.equal('package/package.json')
+        expect(files[1]).to.be.equal('package/README.md')
+        expect(files[3]).to.be.equal('package/dist/cli.js')
+        expect(files[4]).to.be.equal('package/dist/unpacker.js')
+        done()
+      })
+  })
 })

@@ -19,7 +19,8 @@ import unpacker from 'tarball-unpacker'
 // Specify a file and target directory
 unpacker
   .extractFromFile('/path/to/file.tgz', '/tmp/destination')
-  .then(() => {
+  .then((files) => {
+    console.log(files) // An array of unpacked paths to files
     console.log('Done!')
   })
 ```
@@ -29,13 +30,12 @@ Listen to each file extracted:
 ```javascript
 import unpacker from 'tarball-unpacker'
 
-unpacker.configure({
-  onExtract: (entry) => {
-    console.log(entry.path)
-  }
-})
-
 unpacker
+  .configure({
+    onExtract: (entry) => {
+      console.log(entry.path)
+    }
+  })
   .extractFromFile('/path/to/file.tgz', '/tmp/destination')
   .then(() => {
     console.log('Done!')
@@ -53,7 +53,8 @@ import unpacker from 'tarball-unpacker'
 // Specify a URL and target directory
 unpacker
   .extractFromFile('http://www.arkaitzgarro.com/tarball.tgz', '/tmp/destination')
-  .then(() => {
+  .then((files) => {
+    console.log(files) // An array of unpacked paths to files
     console.log('Done!')
   })
   .catch((err) => {

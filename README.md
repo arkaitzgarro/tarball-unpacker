@@ -65,10 +65,10 @@ unpacker
 * Create instances of `unpacker` if needed
 
 ```javascript
-import {Unpaker} from 'tarball-unpacker'
+import {Unpacker} from 'tarball-unpacker'
 
 // Create a new instance of Unpacker
-const unpaker = new Unpacker()
+const unpacker = new Unpacker()
 
 unpacker
   .extractFromFile('http://www.arkaitzgarro.com/tarball.tgz', '/tmp/destination')

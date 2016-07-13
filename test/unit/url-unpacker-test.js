@@ -22,6 +22,10 @@ describe('URL unpacker test:', () => {
     expect(unpacker._options).to.be.empty
   })
 
+  it('logger is set', () => {
+    expect(unpacker._logger).to.not.be.undefined
+  })
+
   it('url doesn not exist', (done) => {
     unpacker.extractFromURL('http://www.google.com/non-existant.file', '/tmp')
       .catch(() => {

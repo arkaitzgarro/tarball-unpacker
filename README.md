@@ -80,6 +80,12 @@ unpacker
   })
 ```
 
+### Options
+
+Available options for `configure` method:
+
+* `silent` (boolean): don't output any log message. Default is `true`.
+
 ### Command line
 
 It's also possible to use `unpacker` as a command line utility, you just need to

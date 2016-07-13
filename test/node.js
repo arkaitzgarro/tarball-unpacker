@@ -1,6 +1,6 @@
 /* global global */
 
-import setup from './setup'
+import setup from './setup/setup'
 
 global.chai = require('chai')
 global.sinon = require('sinon')

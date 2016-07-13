@@ -1,12 +1,10 @@
-/* global describe, it, expect */
+/* global describe, it, spy, expect, __dirname */
 
 'use strict'
 
-import unpacker from '../../dist/unpacker'
+import unpacker from '../src/unpacker'
 
-describe('URL unpacker test:', () => {
-  const tarballURL = 'http://registry.npmjs.org/tarball-unpacker/-/tarball-unpacker-1.0.2.tgz'
-
+describe('File unpacker test:', () => {
   it('instance is created', () => {
     expect(unpacker).to.not.be.undefined
   })
@@ -26,22 +24,30 @@ describe('URL unpacker test:', () => {
     expect(unpacker._logger).to.not.be.undefined
   })
 
-  it('url doesn not exist', (done) => {
-    unpacker.extractFromURL('http://www.google.com/non-existant.file', '/tmp')
+  it('logger is not called', (done) => {
+    const loggerSpy = spy(unpacker, '_logger')
+
+    unpacker.configure({
+      silent: true
+    })
+
+    unpacker.extractFromFile('/non-existant.file', '/tmp')
       .catch(() => {
+        expect(loggerSpy.called).to.be.false
         done()
       })
   })
 
-  it('server does not responde', (done) => {
-    unpacker.extractFromURL('http://locahost:0/', '/tmp')
+  it('file not exist', (done) => {
+    unpacker.extractFromFile('/non-existant.file', '/tmp')
       .catch(() => {
         done()
       })
   })
 
   it('tarball is decompressed', (done) => {
-    unpacker.extractFromURL(tarballURL, '/tmp/tarball-unpacker')
+    unpacker
+      .extractFromFile(__dirname + '/resources/tarball-unpacker.tgz', '/tmp/unpacker')
       .then(() => {
         done()
       })
@@ -49,7 +55,7 @@ describe('URL unpacker test:', () => {
 
   it('decompressed files are present', (done) => {
     unpacker
-      .extractFromURL(tarballURL, '/tmp/tarball-unpacker')
+      .extractFromFile(__dirname + '/resources/tarball-unpacker.tgz', '/tmp/unpacker')
       .then((files) => {
         expect(files[0]).to.be.equal('package/package.json')
         expect(files[1]).to.be.equal('package/README.md')
@@ -69,7 +75,7 @@ describe('URL unpacker test:', () => {
     })
 
     unpacker
-      .extractFromURL(tarballURL, '/tmp/tarball-unpacker')
+      .extractFromFile(__dirname + '/resources/tarball-unpacker.tgz', '/tmp/unpacker')
       .then(() => {
         expect(files[0]).to.be.equal('package/package.json')
         expect(files[1]).to.be.equal('package/README.md')

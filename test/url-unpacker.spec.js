@@ -1,10 +1,12 @@
-/* global describe, it, expect, __dirname */
+/* global describe, it, spy, expect */
 
 'use strict'
 
-import unpacker from '../../dist/unpacker'
+import unpacker from '../src/unpacker'
 
-describe('File unpacker test:', () => {
+describe('URL unpacker test:', () => {
+  const tarballURL = 'http://registry.npmjs.org/tarball-unpacker/-/tarball-unpacker-1.0.2.tgz'
+
   it('instance is created', () => {
     expect(unpacker).to.not.be.undefined
   })
@@ -24,16 +26,36 @@ describe('File unpacker test:', () => {
     expect(unpacker._logger).to.not.be.undefined
   })
 
-  it('file not exist', (done) => {
-    unpacker.extractFromFile('/non-existant.file', '/tmp')
+  it('logger is not called', (done) => {
+    const loggerSpy = spy(unpacker, '_logger')
+
+    unpacker.configure({
+      silent: true
+    })
+
+    unpacker.extractFromURL('http://www.google.com/non-existant.file', '/tmp')
+      .catch(() => {
+        expect(loggerSpy.called).to.be.false
+        done()
+      })
+  })
+
+  it('url doesn not exist', (done) => {
+    unpacker.extractFromURL('http://www.google.com/non-existant.file', '/tmp')
+      .catch(() => {
+        done()
+      })
+  })
+
+  it('server does not responde', (done) => {
+    unpacker.extractFromURL('http://locahost:0/', '/tmp')
       .catch(() => {
         done()
       })
   })
 
   it('tarball is decompressed', (done) => {
-    unpacker
-      .extractFromFile(__dirname + '/../resources/tarball-unpacker.tgz', '/tmp/unpacker')
+    unpacker.extractFromURL(tarballURL, '/tmp/tarball-unpacker')
       .then(() => {
         done()
       })
@@ -41,7 +63,7 @@ describe('File unpacker test:', () => {
 
   it('decompressed files are present', (done) => {
     unpacker
-      .extractFromFile(__dirname + '/../resources/tarball-unpacker.tgz', '/tmp/unpacker')
+      .extractFromURL(tarballURL, '/tmp/tarball-unpacker')
       .then((files) => {
         expect(files[0]).to.be.equal('package/package.json')
         expect(files[1]).to.be.equal('package/README.md')
@@ -61,7 +83,7 @@ describe('File unpacker test:', () => {
     })
 
     unpacker
-      .extractFromFile(__dirname + '/../resources/tarball-unpacker.tgz', '/tmp/unpacker')
+      .extractFromURL(tarballURL, '/tmp/tarball-unpacker')
       .then(() => {
         expect(files[0]).to.be.equal('package/package.json')
         expect(files[1]).to.be.equal('package/README.md')

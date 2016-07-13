@@ -32,6 +32,7 @@ import unpacker from 'tarball-unpacker'
 
 unpacker
   .configure({
+    silent: true,
     onExtract: (entry) => {
       console.log(entry.path)
     }

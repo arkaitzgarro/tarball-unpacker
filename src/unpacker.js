@@ -60,6 +60,8 @@ class Unpacker {
    * @return {Promise}
    */
   extractFromURL (url, destinationFolder) {
+    this._logger('Conecting to: ' + url)
+
     const _extractFromURL = function _extractFromURL (resolve, reject) {
       const req = http.get(url, function (response) {
         if (response.statusCode !== 200) {

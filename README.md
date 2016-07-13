@@ -52,7 +52,7 @@ import unpacker from 'tarball-unpacker'
 
 // Specify a URL and target directory
 unpacker
-  .extractFromFile('http://www.arkaitzgarro.com/tarball.tgz', '/tmp/destination')
+  .extractFromURL('http://www.arkaitzgarro.com/tarball.tgz', '/tmp/destination')
   .then((files) => {
     console.log(files) // An array of unpacked paths to files
     console.log('Done!')
@@ -71,7 +71,7 @@ import {Unpacker} from 'tarball-unpacker'
 const unpacker = new Unpacker()
 
 unpacker
-  .extractFromFile('http://www.arkaitzgarro.com/tarball.tgz', '/tmp/destination')
+  .extractFromURL('http://www.arkaitzgarro.com/tarball.tgz', '/tmp/destination')
   .then(() => {
     console.log('Done!')
   })

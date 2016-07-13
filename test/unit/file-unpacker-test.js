@@ -20,6 +20,10 @@ describe('File unpacker test:', () => {
     expect(unpacker._options).to.be.empty
   })
 
+  it('logger is set', () => {
+    expect(unpacker._logger).to.not.be.undefined
+  })
+
   it('file not exist', (done) => {
     unpacker.extractFromFile('/non-existant.file', '/tmp')
       .catch(() => {

@@ -13,17 +13,20 @@ class Unpacker {
    */
   constructor () {
     this._options = {}
+    this._logger = console.info
   }
 
   /**
-   * Configure unpacker with decompression options
+   * Configure unpacker with options
    *
-   * @param  {Object} options Options for decompression
+   * @param  {Object} options Options
    * @return {Object}         Self instance
    */
-  configure (options) {
+  configure (options = {}) {
     // TODO: extend default instance properties
-    this._options = options || {}
+    this._options = options
+
+    if (options.silent === true) this._logger = () => {}
 
     return this
   }
@@ -57,16 +60,16 @@ class Unpacker {
    * @return {Promise}
    */
   extractFromURL (url, destinationFolder) {
-    const _extractFromURL = function _extractFromURL (resolve, reject) {
-      console.info('Conecting to: ' + url)
+    this._logger('Conecting to: ' + url)
 
+    const _extractFromURL = function _extractFromURL (resolve, reject) {
       const req = http.get(url, function (response) {
         if (response.statusCode !== 200) {
           reject(new Error('Response not OK: ' + response.statusCode))
           return
         }
 
-        console.info('Downloading file...')
+        this._logger('Downloading file...')
 
         this._extract(response, destinationFolder)
           .then(resolve)
@@ -85,7 +88,7 @@ class Unpacker {
     const extract = function (resolve, reject) {
       const files = []
 
-      console.info('Extracting file into ' + destinationFolder)
+      this._logger('Extracting file into ' + destinationFolder)
 
       stream
         .pipe(zlib.createGunzip())

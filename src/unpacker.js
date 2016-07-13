@@ -56,9 +56,11 @@ class Unpacker {
    * @param  {String}  url URL to tarball file
    * @return {Promise}
    */
-  extractFromURL (url, destinationFolder) {
+  extractFromURL (url, destinationFolder, options = {}) {
+    const silent = options.silent || false
+
     const _extractFromURL = function _extractFromURL (resolve, reject) {
-      console.info('Conecting to: ' + url)
+      if (!silent) console.info('Conecting to: ' + url)
 
       const req = http.get(url, function (response) {
         if (response.statusCode !== 200) {
@@ -66,9 +68,9 @@ class Unpacker {
           return
         }
 
-        console.info('Downloading file...')
+        if (!silent) console.info('Downloading file...')
 
-        this._extract(response, destinationFolder)
+        this._extract(response, destinationFolder, options)
           .then(resolve)
           .catch(reject)
       }.bind(this))
@@ -81,11 +83,13 @@ class Unpacker {
     return new Promise(_extractFromURL.bind(this))
   }
 
-  _extract (stream, destinationFolder) {
+  _extract (stream, destinationFolder, options = {}) {
+    const silent = options.silent || false
+
     const extract = function (resolve, reject) {
       const files = []
 
-      console.info('Extracting file into ' + destinationFolder)
+      if (!silent) console.info('Extracting file into ' + destinationFolder)
 
       stream
         .pipe(zlib.createGunzip())
